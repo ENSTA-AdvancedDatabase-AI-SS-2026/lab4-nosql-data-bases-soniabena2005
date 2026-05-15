@@ -34,11 +34,11 @@ Vous êtes ingénieur backend chez **ShopFast**. Les pages produits mettent 3-4 
 
 ### Pattern Cache-Aside
 
-```
+\`\`\`
 Requête ──► Redis ?
               ├─ HIT  ──► Retourner valeur
               └─ MISS ──► DB ──► Stocker dans Redis (TTL) ──► Retourner
-```
+\`\`\`
 
 ---
 
@@ -68,11 +68,11 @@ Bulk insert avec pipeline, transaction MULTI/EXEC pour une commande atomique
 
 ## 🧪 Lancement des tests
 
-```bash
+\`\`\`bash
 cd TP1_KeyValue/starter
 pip install redis pytest
 pytest tests/ -v
-```
+\`\`\`
 
 ---
 

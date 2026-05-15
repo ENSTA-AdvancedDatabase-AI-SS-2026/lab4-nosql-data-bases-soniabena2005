@@ -24,7 +24,7 @@
 
 ### Modèle Cassandra
 
-```
+\`\`\`
 TABLE capteur_mesures (
   wilaya      TEXT,           ← PARTITION KEY → distribué sur les nœuds
   capteur_id  UUID,           ↑
@@ -36,7 +36,7 @@ TABLE capteur_mesures (
   alerte      BOOLEAN
   PRIMARY KEY ((wilaya, date), capteur_id, heure)
 )
-```
+\`\`\`
 
 ### Règle fondamentale
 > **Ne pas penser en termes de tables relationnelles.**  
@@ -52,7 +52,7 @@ TABLE capteur_mesures (
 
 ## 🏗️ Keyspace et Tables
 
-```sql
+\`\`\`sql
 -- Keyspace avec réplication
 CREATE KEYSPACE smartgrid
 WITH replication = {'class': 'NetworkTopologyStrategy',
@@ -67,7 +67,7 @@ AND durable_writes = true;
 
 -- Table des agrégats horaires (pré-calculés)
 -- TODO: à compléter en Ex1
-```
+\`\`\`
 
 ---
 
@@ -75,7 +75,7 @@ AND durable_writes = true;
 
 ### Ex1 — Modélisation des Tables (6 pts) → `starter/ex1_schema.cql`
 
-```sql
+\`\`\`sql
 -- 1.1 Créer le keyspace smartgrid
 
 -- 1.2 Table mesures_par_capteur
@@ -93,11 +93,11 @@ AND durable_writes = true;
 -- Mesures brutes : 90 jours
 -- Alertes : 1 an
 -- Agrégats : 5 ans
-```
+\`\`\`
 
 ### Ex2 — Ingestion de Données (5 pts) → `starter/ex2_ingestion.py`
 
-```python
+\`\`\`python
 # 2.1 Générer et insérer 50 000 mesures simulées
 # (10 000 capteurs × 5 minutes de données)
 # Utiliser des BATCH statements pour la performance
@@ -108,11 +108,11 @@ INSERT INTO mesures_par_capteur (...) VALUES (...) USING TTL 7776000;
 # 2.3 Mesurer le débit d'ingestion (mesures/seconde)
 
 # 2.4 Insérer des alertes (10% des mesures dépassent le seuil)
-```
+\`\`\`
 
 ### Ex3 — Requêtes CQL (7 pts) → `starter/ex3_queries.cql`
 
-```sql
+\`\`\`sql
 -- 3.1 Mesures d'un capteur spécifique sur les dernières 6 heures
 SELECT * FROM mesures_par_capteur
 WHERE capteur_id = ? AND date = ? AND timestamp >= ?;
@@ -121,25 +121,23 @@ WHERE capteur_id = ? AND date = ? AND timestamp >= ?;
 -- (Astuce : utiliser LIMIT 1 avec clustering DESC)
 
 -- 3.3 Capteurs en alerte dans la wilaya "Alger" aujourd'hui
--- Compter et lister
 
 -- 3.4 Consommation totale par heure sur une journée (dashboard)
 
 -- 3.5 Détection d'anomalie : capteurs avec tension < 200V ou > 240V
 -- dans les 30 dernières minutes
 
--- 3.6 Top 10 capteurs les plus actifs (plus de mesures) cette semaine
+-- 3.6 Top 10 capteurs les plus actifs cette semaine
 
 -- 3.7 Requête ALLOW FILTERING : Pourquoi éviter ?
 -- Écrire la même requête correctement avec la bonne table
-```
+\`\`\`
 
 ### Ex4 — Compaction et Maintenance (4 pts) → `starter/ex4_maintenance.cql`
 
-```sql
+\`\`\`sql
 -- 4.1 Choisir la stratégie de compaction pour chaque table
 -- TimeWindowCompactionStrategy (TWCS) pour les séries temporelles
--- Expliquer le choix
 
 -- 4.2 Configurer TWCS pour les mesures
 ALTER TABLE mesures_par_capteur
@@ -150,16 +148,15 @@ WITH compaction = {
 };
 
 -- 4.3 Vérifier l'utilisation des TTL
--- Requête pour voir combien de lignes expirent dans les 7 prochains jours
 
--- 4.4 Analyser une partition "hot" : comment la détecter et la corriger ?
-```
+-- 4.4 Analyser une partition "hot" : comment la détecter et corriger ?
+\`\`\`
 
 ---
 
 ## 🧪 Lancement
 
-```bash
+\`\`\`bash
 # Se connecter à Cassandra
 docker exec -it nosql_cassandra cqlsh
 
@@ -170,7 +167,7 @@ SOURCE '/tp3/starter/ex1_schema.cql'
 cd TP3_ColumnFamily/starter
 pip install cassandra-driver pytest
 pytest tests/ -v
-```
+\`\`\`
 
 ---
 
